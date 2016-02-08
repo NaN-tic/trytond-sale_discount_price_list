@@ -19,6 +19,7 @@ class SaleLine:
 
     def update_discounts(self, res):
         if 'discount1' not in res:
+            discounts = []
             if hasattr(self, 'sale') and getattr(self.sale, 'price_list', None):
                 discounts = self.sale.price_list.compute_discount(
                     self.sale.party, self.product, self.unit_price,
