@@ -5,10 +5,10 @@ from trytond.pool import PoolMeta
 
 
 __all__ = ['SaleLine']
-__metaclass__ = PoolMeta
 
 
 class SaleLine:
+    __metaclass__ = PoolMeta
     __name__ = 'sale.line'
 
     @classmethod
@@ -17,30 +17,23 @@ class SaleLine:
         cls.product.on_change.add('unit_price')
         cls.quantity.on_change.add('unit_price')
 
-    def update_discounts(self, res):
-        if 'discount1' not in res:
-            if hasattr(self, 'sale') and getattr(self.sale, 'price_list', None):
+    def update_discounts(self,):
+        if not getattr(self, 'discount1', False):
+            if hasattr(self, 'sale') and hasattr(self.sale, 'price_list'):
                 discounts = self.sale.price_list.compute_discount(
                     self.sale.party, self.product, self.unit_price,
                     self.discount1, self.discount2, self.discount3,
                     self.quantity, self.unit)
                 c = 1
                 for discount in discounts:
-                    if not discount is None:
-                        res['discount%d' % c] = discount
+                    if discount is not None:
+                        setattr(self, 'discount%d' % c, discount)
                     c += 1
-            c = 1
-            for discount in discounts:
-                if not discount is None:
-                    res['discount%d' % c] = discount
-                c += 1
 
     def on_change_product(self):
-        res = super(SaleLine, self).on_change_product()
-        self.update_discounts(res)
-        return res
+        super(SaleLine, self).on_change_product()
+        self.update_discounts()
 
     def on_change_quantity(self):
-        res = super(SaleLine, self).on_change_quantity()
-        self.update_discounts(res)
-        return res
+        super(SaleLine, self).on_change_quantity()
+        self.update_discounts()
