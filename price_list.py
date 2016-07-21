@@ -28,10 +28,7 @@ class PriceList:
 
         for line in self.lines:
             if line.match(pattern):
-                with Transaction().set_context(
-                        self._get_context_price_list_line(party, product,
-                            unit_price, quantity, uom)):
-                    return line.discount1, line.discount2, line.discount3
+                return line.discount1, line.discount2, line.discount3
         return discount1, discount2, discount3
 
 
