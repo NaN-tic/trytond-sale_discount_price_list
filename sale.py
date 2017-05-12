@@ -19,7 +19,8 @@ class SaleLine:
 
     def update_discounts(self,):
         if not getattr(self, 'discount1', False):
-            if hasattr(self, 'sale') and hasattr(self.sale, 'price_list'):
+            if hasattr(self, 'sale') and hasattr(self.sale, 'price_list') \
+                    and self.sale.price_list:
                 discounts = self.sale.price_list.compute_discount(
                     self.sale.party, self.product, self.unit_price,
                     self.discount1, self.discount2, self.discount3,
