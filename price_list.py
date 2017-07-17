@@ -15,7 +15,9 @@ class PriceList:
 
     def compute_discount(self, party, product, unit_price, discount1,
             discount2, discount3, quantity, uom, pattern=None):
-        Uom = Pool().get('product.uom')
+        pool = Pool()
+        Uom = pool.get('product.uom')
+        PriceListLine = pool.get('product.price_list.line')
 
         if pattern is None:
             pattern = {}
@@ -25,7 +27,14 @@ class PriceList:
         pattern['quantity'] = Uom.compute_qty(uom, quantity,
             product.default_uom, round=False) if product else quantity
 
-        for line in self.lines:
+        lines = PriceListLine.search([
+                ('price_list', '=', self.id),
+                ['OR',
+                    ('product', '=', None),
+                    ('product', '=', product and product.id or None),
+                    ]
+                ])
+        for line in lines:
             if line.match(pattern):
                 return line.discount1, line.discount2, line.discount3
         return discount1, discount2, discount3
