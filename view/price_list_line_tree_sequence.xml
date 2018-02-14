@@ -4,13 +4,13 @@ this repository contains the full copyright notices and license terms. -->
 <data>
     <xpath expr="/tree/field[@name='formula']" position="after">
         <field name="discount1" factor="100">
-            <suffix string="%"/>
+            <suffix string="%" name="discount1"/>
         </field>
         <field name="discount2" factor="100">
-            <suffix string="%"/>
+            <suffix string="%" name="discount2"/>
         </field>
         <field name="discount3" factor="100">
-            <suffix string="%"/>
+            <suffix string="%" name="discount3"/>
         </field>
     </xpath>
 </data>

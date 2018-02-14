@@ -9,6 +9,7 @@ Imports::
     >>> from decimal import Decimal
     >>> from operator import attrgetter
     >>> from proteus import config, Model, Wizard
+    >>> from trytond.tests.tools import activate_modules
     >>> from trytond.modules.company.tests.tools import create_company, \
     ...     get_company
     >>> from trytond.modules.account.tests.tools import create_fiscalyear, \
@@ -17,17 +18,9 @@ Imports::
     ...     set_fiscalyear_invoice_sequences, create_payment_term
     >>> today = datetime.date.today()
 
-Create database::
-
-    >>> config = config.set_trytond()
-    >>> config.pool.test = True
-
 Install sale_discount_price_list::
 
-    >>> Module = Model.get('ir.module')
-    >>> sale_module, = Module.find([('name', '=', 'sale_discount_price_list')])
-    >>> Module.install([sale_module.id], config.context)
-    >>> Wizard('ir.module.install_upgrade').execute('upgrade')
+    >>> config = activate_modules('sale_discount_price_list')
 
 Create company::
 
@@ -45,26 +38,6 @@ Create sale user::
     >>> sale_group, = Group.find([('name', '=', 'Sales')])
     >>> sale_user.groups.append(sale_group)
     >>> sale_user.save()
-
-Create stock user::
-
-    >>> stock_user = User()
-    >>> stock_user.name = 'Stock'
-    >>> stock_user.login = 'stock'
-    >>> stock_user.main_company = company
-    >>> stock_group, = Group.find([('name', '=', 'Stock')])
-    >>> stock_user.groups.append(stock_group)
-    >>> stock_user.save()
-
-Create account user::
-
-    >>> account_user = User()
-    >>> account_user.name = 'Account'
-    >>> account_user.login = 'account'
-    >>> account_user.main_company = company
-    >>> account_group, = Group.find([('name', '=', 'Account')])
-    >>> account_user.groups.append(account_group)
-    >>> account_user.save()
 
 Create fiscal year::
 

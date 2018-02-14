@@ -2,6 +2,7 @@
 # The COPYRIGHT file at the top level of this repository contains
 # the full copyright notices and license terms.
 from trytond.pool import PoolMeta
+from trytond.model import fields
 
 
 __all__ = ['SaleLine']
@@ -10,12 +11,6 @@ __all__ = ['SaleLine']
 class SaleLine:
     __metaclass__ = PoolMeta
     __name__ = 'sale.line'
-
-    @classmethod
-    def __setup__(cls):
-        super(SaleLine, cls).__setup__()
-        cls.product.on_change.add('unit_price')
-        cls.quantity.on_change.add('unit_price')
 
     def update_discounts(self,):
         if not getattr(self, 'discount1', False):
@@ -31,10 +26,12 @@ class SaleLine:
                         setattr(self, 'discount%d' % c, discount)
                     c += 1
 
+    @fields.depends('unit_price')
     def on_change_product(self):
         super(SaleLine, self).on_change_product()
         self.update_discounts()
 
+    @fields.depends('unit_price')
     def on_change_quantity(self):
         super(SaleLine, self).on_change_quantity()
         self.update_discounts()
