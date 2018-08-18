@@ -7,9 +7,8 @@ from trytond.modules.product import price_digits
 __all__ = ['PriceList', 'PriceListLine']
 
 
-class PriceList:
+class PriceList(metaclass=PoolMeta):
     __name__ = 'product.price_list'
-    __metaclass__ = PoolMeta
 
     def compute_discount(self, party, product, unit_price, discount1,
             discount2, discount3, quantity, uom, pattern=None):
@@ -38,9 +37,8 @@ class PriceList:
         return discount1, discount2, discount3
 
 
-class PriceListLine:
+class PriceListLine(metaclass=PoolMeta):
     __name__ = 'product.price_list.line'
-    __metaclass__ = PoolMeta
     discount1 = fields.Numeric('Discount 1', digits=price_digits)
     discount2 = fields.Numeric('Discount 2', digits=price_digits)
     discount3 = fields.Numeric('Discount 3', digits=price_digits)

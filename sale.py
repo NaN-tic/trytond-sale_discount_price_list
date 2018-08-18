@@ -8,8 +8,7 @@ from trytond.model import fields
 __all__ = ['SaleLine']
 
 
-class SaleLine:
-    __metaclass__ = PoolMeta
+class SaleLine(metaclass=PoolMeta):
     __name__ = 'sale.line'
 
     def update_discounts(self,):
