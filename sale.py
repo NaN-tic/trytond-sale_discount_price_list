@@ -24,7 +24,7 @@ class SaleLine:
                 discounts = self.sale.price_list.compute_discount(
                     self.sale.party, self.product, self.unit_price,
                     self.discount1, self.discount2, self.discount3,
-                    self.quantity, self.unit)
+                    self.quantity or 0, self.unit)
                 c = 1
                 for discount in discounts:
                     if not discount is None:
