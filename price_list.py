@@ -15,7 +15,6 @@ class PriceList(metaclass=PoolMeta):
         pool = Pool()
         Uom = pool.get('product.uom')
         PriceListLine = pool.get('product.price_list.line')
-
         if pattern is None:
             pattern = {}
 
@@ -23,6 +22,12 @@ class PriceList(metaclass=PoolMeta):
         pattern['product'] = product and product.id or None
         pattern['quantity'] = Uom.compute_qty(uom, quantity,
             product.default_uom, round=False) if product else quantity
+
+        parent_discounts = None
+        if getattr(self, 'parent', None):
+            parent_discounts = self.parent.compute_discount(party, product,
+                unit_price, discount1, discount2, discount3, quantity, uom,
+                pattern=pattern)
 
         lines = PriceListLine.search([
                 ('price_list', '=', self.id),
@@ -33,7 +38,15 @@ class PriceList(metaclass=PoolMeta):
                 ])
         for line in lines:
             if line.match(pattern):
-                return line.discount1, line.discount2, line.discount3
+                if not parent_discounts or line.formula != 'unit_price':
+                    return line.discount1, line.discount2, line.discount3
+                child_discounts = (line.discount1, line.discount2,
+                    line.discount3)
+                discounts = []
+                for child, parent in zip(child_discounts, parent_discounts):
+                    discounts.append(child or parent)
+                return tuple(discounts)
+
         return discount1, discount2, discount3
 
 
