@@ -36,6 +36,10 @@ class PriceList(metaclass=PoolMeta):
                     ('product', '=', product and product.id or None),
                     ]
                 ])
+
+        if not lines and parent_discounts:
+            return parent_discounts
+
         for line in lines:
             if line.match(pattern):
                 if not parent_discounts or line.formula != 'unit_price':
