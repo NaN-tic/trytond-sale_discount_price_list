@@ -15,11 +15,21 @@ class PriceList(metaclass=PoolMeta):
         pool = Pool()
         Uom = pool.get('product.uom')
         PriceListLine = pool.get('product.price_list.line')
+
+        def parents(categories):
+            for category in categories:
+                while category:
+                    yield category
+                    category = category.parent
+
         if pattern is None:
             pattern = {}
 
         pattern = pattern.copy()
-        pattern['product'] = product and product.id or None
+        if product:
+            pattern['categories'] = [
+                c.id for c in parents(product.categories_all)]
+            pattern['product'] = product.id
         pattern['quantity'] = Uom.compute_qty(uom, quantity,
             product.default_uom, round=False) if product else quantity
 
