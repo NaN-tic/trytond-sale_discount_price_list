@@ -25,10 +25,11 @@ class SaleLine(metaclass=PoolMeta):
                         setattr(self, 'discount%d' % c, discount)
                     c += 1
 
-    @fields.depends('unit_price')
+    @fields.depends('unit_price', 'quantity')
     def on_change_product(self):
         super(SaleLine, self).on_change_product()
-        self.update_discounts()
+        if self.quantity:
+            self.update_discounts()
 
     @fields.depends('unit_price')
     def on_change_quantity(self):

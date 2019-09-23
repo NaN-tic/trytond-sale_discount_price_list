@@ -61,6 +61,9 @@ class PriceList(metaclass=PoolMeta):
                     discounts.append(child or parent)
                 return tuple(discounts)
 
+        if parent_discounts:
+            return parent_discounts
+
         return discount1, discount2, discount3
 
 
