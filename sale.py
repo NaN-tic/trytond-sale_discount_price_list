@@ -22,8 +22,7 @@ class SaleLine:
                     self.quantity or 0, self.unit)
                 c = 1
                 for discount in discounts:
-                    if discount is not None:
-                        setattr(self, 'discount%d' % c, discount)
+                    setattr(self, 'discount%d' % c, discount)
                     c += 1
 
     @fields.depends('unit_price')
