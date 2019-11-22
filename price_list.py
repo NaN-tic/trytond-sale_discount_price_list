@@ -52,7 +52,8 @@ class PriceList(metaclass=PoolMeta):
 
         for line in lines:
             if line.match(pattern):
-                if not parent_discounts or line.formula != 'unit_price':
+                if (not parent_discounts or line.formula not in ('unit_price',
+                            'parent_unit_price')):
                     return line.discount1, line.discount2, line.discount3
                 child_discounts = (line.discount1, line.discount2,
                     line.discount3)
