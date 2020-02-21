@@ -3,8 +3,11 @@
 from trytond.model import fields
 from trytond.pool import PoolMeta, Pool
 from trytond.modules.product import price_digits
+from decimal import Decimal
 
 __all__ = ['PriceList', 'PriceListLine']
+
+ZERO_ = Decimal(0)
 
 
 class PriceList:
@@ -34,7 +37,9 @@ class PriceList:
                 ])
         for line in lines:
             if line.match(pattern):
-                return line.discount1, line.discount2, line.discount3
+                return (line.discount1 or ZERO_, line.discount2 or ZERO_,
+                    line.discount3 or ZERO_)
+
         return discount1, discount2, discount3
 
 
