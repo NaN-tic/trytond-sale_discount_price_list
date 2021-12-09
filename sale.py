@@ -27,7 +27,7 @@ class SaleLine(metaclass=PoolMeta):
         elif context.get('price_list') and context.get('customer'):
             price_list = PriceList(context.get('price_list'))
             party = Party(context.get('customer'))
-        if price_list:
+        if price_list and self.unit:
             discounts = price_list.compute_discount(
                 party, self.product, self.unit_price,
                 self.discount1 or 0, self.discount2 or 0, self.discount3 or 0,
