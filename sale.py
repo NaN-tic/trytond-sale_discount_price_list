@@ -5,8 +5,6 @@ from trytond.pool import Pool, PoolMeta
 from trytond.model import fields
 from trytond.transaction import Transaction
 
-__all__ = ['SaleLine']
-
 
 class SaleLine(metaclass=PoolMeta):
     __name__ = 'sale.line'
@@ -40,12 +38,12 @@ class SaleLine(metaclass=PoolMeta):
 
     @fields.depends('quantity')
     def on_change_product(self):
-        super(SaleLine, self).on_change_product()
-        if self.quantity:
+        if self.quantity is not None:
             self.update_discounts()
+        super().on_change_product()
 
     @fields.depends('quantity')
     def on_change_quantity(self):
-        super(SaleLine, self).on_change_quantity()
-        if self.quantity:
+        if self.quantity is not None:
             self.update_discounts()
+        super().on_change_quantity()
