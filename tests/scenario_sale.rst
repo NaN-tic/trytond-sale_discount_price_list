@@ -102,7 +102,7 @@ Create product::
     >>> product.template = template
     >>> product.save()
 
-Check discounts::
+Check discounts and unit_price::
 
     >>> config.user = sale_user.id
     >>> Sale = Model.get('sale.sale')
@@ -114,9 +114,18 @@ Check discounts::
     >>> sale_line = sale.lines.new()
     >>> sale_line.product = product
     >>> sale_line.quantity = 1.0
-    >>> sale_line.discount1
-    Decimal('0.5')
-    >>> sale_line.discount2
-    Decimal('0.2')
-    >>> sale_line.discount3
-    Decimal('0.1')
+    >>> sale_line.discount1 == Decimal('0.5')
+    True
+    >>> sale_line.discount2 == Decimal('0.2')
+    True
+    >>> sale_line.discount3 == Decimal('0.1')
+    True
+    >>> sale_line.unit_price == Decimal('3.6000')
+    True
+    >>> sale_line.amount == Decimal('3.6000')
+    True
+    >>> sale_line.unit_price != product.list_price
+    True
+    >>> sale_line.discount1 = Decimal('0.6')
+    >>> sale_line.unit_price == Decimal('2.8800')
+    True
