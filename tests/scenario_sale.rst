@@ -61,6 +61,7 @@ Create price list::
     >>> PriceList = Model.get('product.price_list')
     >>> price_list = PriceList()
     >>> price_list.name = 'Default List'
+    >>> price_list.price = 'list_price'
     >>> price_list_line = price_list.lines.new()
     >>> price_list_line.discount1 = Decimal('.5')
     >>> price_list_line.discount2 = Decimal('.2')
