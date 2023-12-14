@@ -17,13 +17,15 @@ class SaleLine(metaclass=PoolMeta):
         Party = pool.get('party.party')
 
         price_list = None
+        party = None
         context = Transaction().context
 
-        if self.sale and self.sale.price_list:
+        if self.sale:
             price_list = self.sale.price_list
             party = self.sale.party
-        elif context.get('price_list') and context.get('customer'):
+        if context.get('price_list'):
             price_list = PriceList(context.get('price_list'))
+        if context.get('customer'):
             party = Party(context.get('customer'))
         if price_list and self.unit:
             discounts = price_list.compute_discount(
