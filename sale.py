@@ -40,9 +40,9 @@ class SaleLine(metaclass=PoolMeta):
 
     @fields.depends('quantity')
     def on_change_product(self):
+        super().on_change_product()
         if self.quantity is not None:
             self.update_discounts()
-        super().on_change_product()
 
     @fields.depends('quantity')
     def on_change_quantity(self):
