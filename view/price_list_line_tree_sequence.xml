@@ -2,15 +2,12 @@
 <!-- This file is part of Tryton.  The COPYRIGHT file at the top level of
 this repository contains the full copyright notices and license terms. -->
 <data>
+    <xpath expr="/tree/field[@name='formula']" position="before">
+        <field name="base_price_formula" optional="1"/>
+    </xpath>
     <xpath expr="/tree/field[@name='formula']" position="after">
-        <field name="discount1" factor="100">
-            <suffix string="%" name="discount1"/>
-        </field>
-        <field name="discount2" factor="100">
-            <suffix string="%" name="discount2"/>
-        </field>
-        <field name="discount3" factor="100">
-            <suffix string="%" name="discount3"/>
+        <field name="discount_rate" factor="100" optional="1">
+            <suffix name="discount_rate" string="%"/>
         </field>
     </xpath>
 </data>
