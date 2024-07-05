@@ -9,7 +9,7 @@ from configparser import ConfigParser
 
 MODULE = 'sale_discount_price_list'
 PREFIX = 'trytonspain'
-MODULE2PREFIX = {'sale_discount': 'trytonspain', 'sale_3_discounts': 'nantic'}
+MODULE2PREFIX = {'sale_discount': 'trytonspain'}
 OWNER = {
     'nantic':'NaN-tic',
     'trytonzz':'nanticzz',
@@ -79,12 +79,6 @@ requires += [get_require_version('trytond_sale_price_list'),
        '#egg=trytonspain-account_invoice_discount-%(series)s'%{
                'branch': branch,
                'series': series,}),
-   ('nantic-account_invoice_3_discounts@git+https://github.com/nan-tic/'
-       'trytond-account_invoice_3_discounts.git@%(branch)s'
-       '#egg=nantic-account_invoice_3_discounts-%(series)s'%{
-               'branch': branch,
-               'series': series,}),
-
 ]
 
 dependency_links = []

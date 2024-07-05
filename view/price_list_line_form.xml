@@ -2,21 +2,17 @@
 <!-- This file is part of Tryton.  The COPYRIGHT file at the top level of
 this repository contains the full copyright notices and license terms. -->
 <data>
+    <xpath expr="/form/field[@name='formula']" position="before">
+        <label name="base_price_formula"/>
+        <field name="base_price_formula" colspan="3"/>
+    </xpath>
     <xpath expr="/form/field[@name='formula']" position="after">
-        <label name="discount1"/>
-        <group id="discount1" col="2">
-            <field name="discount1" factor="100" xexpand="0" xfill="0"/>
-            <label name="discount1" string="%" xalign="0.0" xexpand="1" xfill="1"/>
-        </group>
-        <label name="discount2"/>
-        <group id="discount2" col="2">
-            <field name="discount2" factor="100" xexpand="0" xfill="0"/>
-            <label name="discount2" string="%" xalign="0.0" xexpand="1" xfill="1"/>
-        </group>
-        <label name="discount3"/>
-        <group id="discount3" col="2">
-            <field name="discount3" factor="100" xexpand="0" xfill="0"/>
-            <label name="discount3" string="%" xalign="0.0" xexpand="1" xfill="1"/>
+        <label id="discount" string="Discount"/>
+        <group col="-1" id="discounts">
+            <group col="-1" id="discount_rate">
+                <field name="discount_rate" factor="100" xexpand="0"/>
+                <label name="discount_rate" string="%" xalign="0.0" xexpand="1"/>
+            </group>
         </group>
     </xpath>
 </data>

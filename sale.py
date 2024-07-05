@@ -4,48 +4,48 @@
 from trytond.pool import Pool, PoolMeta
 from trytond.model import fields
 from trytond.transaction import Transaction
+from trytond.modules.product import round_price
 
 
 class SaleLine(metaclass=PoolMeta):
     __name__ = 'sale.line'
 
-    @fields.depends('unit_price', 'product', 'quantity', 'unit',
-        'discount1', 'discount2', 'discount3', 'sale', '_parent_sale.price_list')
-    def update_discounts(self,):
+    @fields.depends('product', 'quantity', 'unit', 'sale',
+        '_parent_sale.price_list')
+    def update_discount(self,):
         pool = Pool()
         PriceList = pool.get('product.price_list')
-        Party = pool.get('party.party')
 
         price_list = None
-        party = None
         context = Transaction().context
 
         if self.sale:
             price_list = self.sale.price_list
-            party = self.sale.party
         if context.get('price_list'):
             price_list = PriceList(context.get('price_list'))
-        if context.get('customer'):
-            party = Party(context.get('customer'))
         if price_list and self.unit:
-            discounts = price_list.compute_discount(
-                party, self.product, self.unit_price,
-                self.discount1 or 0, self.discount2 or 0, self.discount3 or 0,
-                self.quantity or 0, self.unit)
-            c = 1
-            for discount in discounts:
-                if discount is not None:
-                    setattr(self, 'discount%d' % c, discount)
-                c += 1
+            discount_rate = price_list.compute_discount_rate(self.product,
+                self.quantity, self.unit)
+            if not discount_rate is None:
+                self.discount_rate = discount_rate
+                self.on_change_discount_rate()
+
+    @fields.depends('product', 'unit')
+    def compute_base_price(self):
+        res = super().compute_base_price()
+        if self.product and self.sale.price_list:
+            price = self.sale.price_list.compute_base_price(self.product,
+                self.quantity, self.unit)
+            if not price is None:
+                return round_price(price)
+        return res
 
     @fields.depends('quantity')
     def on_change_product(self):
         super().on_change_product()
-        if self.quantity is not None:
-            self.update_discounts()
+        self.update_discount()
 
     @fields.depends('quantity')
     def on_change_quantity(self):
-        if self.quantity is not None:
-            self.update_discounts()
         super().on_change_quantity()
+        self.update_discount()
