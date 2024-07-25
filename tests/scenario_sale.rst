@@ -129,3 +129,40 @@ Check discounts and unit_price::
     >>> sale_line.discount1 = Decimal('0.6')
     >>> sale_line.unit_price == Decimal('2.8800')
     True
+    >>> sale.untaxed_amount == Decimal('2.8800')
+    True
+
+Modify Header::
+
+    >>> sale = Sale()
+    >>> sale.party = customer
+    >>> sale.invoice_method = 'order'
+    >>> sale.price_list = None
+    >>> sale_line = sale.lines.new()
+    >>> sale_line.product = product
+    >>> sale_line.quantity = 1.0
+    >>> sale_line.discount1 == Decimal('0.0')
+    True
+    >>> sale_line.discount2 == Decimal('0.0')
+    True
+    >>> sale_line.discount3 == Decimal('0.0')
+    True
+    >>> sale_line.unit_price == Decimal('10')
+    True
+    >>> sale_line.amount == Decimal('10')
+    True
+    >>> sale.save()
+
+    >>> modify_header = sale.click('modify_header')
+    >>> modify_header.form.party == customer
+    True
+    >>> modify_header.form.price_list = price_list
+    >>> modify_header.execute('modify')
+
+    >>> sale_line, = sale.lines
+    >>> sale_line.amount == Decimal('3.6000')
+    True
+    >>> sale_line.discount, sale_line.discount1, sale_line.discount2, sale_line.discount3
+    (Decimal('0.6400'), Decimal('0.5'), Decimal('0.2'), Decimal('0.1'))
+    >>> sale.untaxed_amount == Decimal('3.60')
+    True
