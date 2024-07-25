@@ -38,14 +38,22 @@ class SaleLine(metaclass=PoolMeta):
                     setattr(self, 'discount%d' % c, discount)
                 c += 1
 
-    @fields.depends('quantity')
+    @fields.depends('discount1', 'discount2', 'discount3', 'product')
     def on_change_product(self):
         super().on_change_product()
-        if self.quantity is not None:
+        if self.product is not None:
             self.update_discounts()
+        if (self.discount1 is not None
+                or self.discount2 is not None
+                or self.discount3 is not None):
+            self.update_prices()
 
-    @fields.depends('quantity')
+    @fields.depends('discount1', 'discount2', 'discount3', 'quantity')
     def on_change_quantity(self):
+        super().on_change_quantity()
         if self.quantity is not None:
             self.update_discounts()
-        super().on_change_quantity()
+        if (self.discount1 is not None
+                or self.discount2 is not None
+                or self.discount3 is not None):
+            self.update_prices()
