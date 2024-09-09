@@ -32,10 +32,20 @@ class SaleLine(metaclass=PoolMeta):
 
     @fields.depends('product', 'unit')
     def compute_base_price(self):
+        pool = Pool()
+        Tax = pool.get('account.tax')
+        Date = pool.get('ir.date')
+
         res = super().compute_base_price()
-        if self.product and self.sale.price_list:
-            price = self.sale.price_list.compute_base_price(self.product,
+
+        today = Date.today()
+        price_list = (self.sale.price_list
+            if self.sale and self.sale.price_list else None)
+        if self.product and price_list:
+            price = price_list.compute_base_price(self.product,
                 self.quantity, self.unit)
+            if price_list.tax_included and self.taxes and price is not None:
+                price = Tax.reverse_compute(price, self.taxes, today)
             if not price is None:
                 return round_price(price)
         return res
