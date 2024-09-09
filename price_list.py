@@ -88,4 +88,6 @@ class PriceListLine(metaclass=PoolMeta):
     def get_base_price(self, **context):
         'Return base price (as Decimal)'
         context.setdefault('functions', {})['Decimal'] = Decimal
+        if self.base_price_formula is None:
+            return
         return simple_eval(decistmt(self.base_price_formula), **context)
