@@ -30,7 +30,7 @@ class SaleLine(metaclass=PoolMeta):
                 self.discount_rate = discount_rate
                 self.on_change_discount_rate()
 
-    @fields.depends('product', 'unit')
+    @fields.depends('product', 'unit', 'sale', '_parent_sale.price_list')
     def compute_base_price(self):
         pool = Pool()
         Tax = pool.get('account.tax')
