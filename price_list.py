@@ -73,6 +73,9 @@ class PriceListLine(metaclass=PoolMeta):
         if field_names and not (field_names & {'price_list', 'base_price_formula'}):
             return
         for line in lines:
+            if line.base_price_formula is None or line.base_price_formula == '':
+                continue
+
             context = line.price_list.get_context_formula(
                 product=None, quantity=0, uom=None)
             try:
@@ -88,6 +91,6 @@ class PriceListLine(metaclass=PoolMeta):
     def get_base_price(self, **context):
         'Return base price (as Decimal)'
         context.setdefault('functions', {})['Decimal'] = Decimal
-        if self.base_price_formula is None:
+        if self.base_price_formula is None or self.base_price_formula == '':
             return
         return simple_eval(decistmt(self.base_price_formula), **context)
