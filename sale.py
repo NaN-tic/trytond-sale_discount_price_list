@@ -12,7 +12,7 @@ class SaleLine(metaclass=PoolMeta):
 
     @fields.depends('product', 'quantity', 'unit', 'sale',
         '_parent_sale.price_list')
-    def update_discount(self,):
+    def update_discount(self):
         pool = Pool()
         PriceList = pool.get('product.price_list')
 
