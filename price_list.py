@@ -2,8 +2,10 @@
 # this repository contains the full copyright notices and license terms.
 from decimal import Decimal
 from simpleeval import simple_eval
+
 from trytond.model import fields
 from trytond.pool import PoolMeta, Pool
+from trytond.pyson import Eval, Bool
 from trytond.i18n import gettext
 from trytond.tools import decistmt
 from trytond.modules.product_price_list.price_list import FormulaError, Null
@@ -62,6 +64,29 @@ class PriceListLine(metaclass=PoolMeta):
             '- list_price: the list price of the product'))
 
     discount_rate = fields.Numeric("Discount Rate", digits=(16, 4))
+
+    @classmethod
+    def __setup__(cls):
+        super().__setup__()
+        readonly = ((Bool(Eval('base_price_formula', False)))
+            & (Eval('discount_rate', None) != None))
+        if cls.formula.states.get('readonly'):
+            cls.formula.states['readonly'] |= readonly
+        else:
+            cls.formula.states['readonly'] = readonly
+
+    def update_formula(self):
+        if (self.base_price_formula
+                and self.discount_rate is not None):
+            self.formula = '0'
+
+    @fields.depends('base_price_formula', 'discount_rate')
+    def on_change_base_price_formula(self):
+        self.update_formula()
+
+    @fields.depends('base_price_formula', 'discount_rate')
+    def on_change_discount_rate(self):
+        self.update_formula()
 
     @classmethod
     def validate_fields(cls, lines, field_names):
