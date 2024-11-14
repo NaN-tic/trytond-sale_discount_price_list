@@ -1,30 +1,31 @@
 #
-# Albert Cervera i Areny <albert@nan-tic.com>, 2023.
 msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:product.price_list.line,base_price_formula:"
+msgid "Base Price Formula"
+msgstr "Formula preu base"
+
+msgctxt "field:product.price_list.line,discount_rate:"
+msgid "Discount Rate"
+msgstr "% Descompte"
+
+msgctxt "help:product.price_list.line,base_price_formula:"
+msgid ""
+"Python expression that will be evaluated with:\n"
+"- unit_price: the original unit_price\n"
+"- cost_price: the cost price of the product\n"
+"- list_price: the list price of the product"
 msgstr ""
-"Content-Type: text/plain; charset=UTF-8\n"
-"Last-Translator: Albert Cervera i Areny <albert@nan-tic.com>\n"
-"PO-Revision-Date: 2023-11-25 00:33+0100\n"
-"Project-Id-Version: \n"
-"Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
-"Language: ca_ES\n"
-"Content-Transfer-Encoding: 8bit\n"
-"MIME-Version: 1.0\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 22.12.3\n"
-
-msgctxt "field:product.price_list.line,discount1:"
-msgid "Discount 1"
-msgstr "Descompte 1"
-
-msgctxt "field:product.price_list.line,discount2:"
-msgid "Discount 2"
-msgstr "Descompte 2"
-
-msgctxt "field:product.price_list.line,discount3:"
-msgid "Discount 3"
-msgstr "Descompte 3"
+"Expressió Python que s'avaluarà amb:\n"
+"- unit_price: El preu unitari original\n"
+"- cost_price: El preu de cost del producte\n"
+"- list_price: El preu de venda del producte"
 
 msgctxt "view:product.price_list.line:"
 msgid "%"
 msgstr "%"
+
+msgctxt "view:product.price_list.line:"
+msgid "Discount"
+msgstr "Descompte"
