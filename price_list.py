@@ -75,6 +75,7 @@ class PriceListLine(metaclass=PoolMeta):
         else:
             cls.formula.states['readonly'] = readonly
 
+    @fields.depends('base_price_formula', 'discount_rate')
     def update_formula(self):
         if (self.base_price_formula
                 and self.discount_rate is not None):
