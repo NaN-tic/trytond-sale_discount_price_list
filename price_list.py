@@ -31,8 +31,9 @@ class PriceList(metaclass=PoolMeta):
             pattern['categories'] = [
                 c.id for c in parents(product.categories_all)]
             pattern['product'] = product.id
-        pattern['quantity'] = Uom.compute_qty(uom, quantity,
-            self.get_uom(product), round=False) if product else quantity
+        pattern['quantity'] = Uom.compute_qty(
+            uom or self.get_uom(product), quantity, self.get_uom(product),
+            round=False) if product else quantity
 
         for line in self.lines:
             if line.match(pattern):
