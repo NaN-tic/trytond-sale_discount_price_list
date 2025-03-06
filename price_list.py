@@ -9,6 +9,7 @@ from trytond.pyson import Eval, Bool
 from trytond.i18n import gettext
 from trytond.tools import decistmt
 from trytond.modules.product_price_list.price_list import FormulaError, Null
+from trytond.modules.product.product import round_price
 
 
 class PriceList(metaclass=PoolMeta):
@@ -53,6 +54,17 @@ class PriceList(metaclass=PoolMeta):
         line = self.get_price_line(product, quantity, uom, pattern=pattern)
         if line:
             return line.discount_rate
+
+    def compute(self, product, quantity, uom, pattern=None):
+        unit_price = super().compute(product, quantity, uom, pattern)
+
+        line = self.get_price_line(product, quantity, product.default_uom)
+        if line and line.formula == '0' and line.base_price_formula:
+            base_price = self.compute_base_price(
+                product, quantity, product.default_uom)
+            if base_price is not None:
+                unit_price = round_price(base_price)
+        return unit_price
 
 
 class PriceListLine(metaclass=PoolMeta):
