@@ -97,6 +97,6 @@ class SaleDiscountPriceListTestCase(CompanyTestMixin, ModuleTestCase):
             with Transaction().set_context(price_list=price_list.id):
                 for product, unit_price in tests:
                     product = Product(product.id)
-                self.assertEqual(product.sale_price_uom, unit_price)
+                    self.assertEqual(product.sale_price_uom, unit_price)
 
 del ModuleTestCase
