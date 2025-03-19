@@ -82,7 +82,7 @@ class SaleDiscountPriceListTestCase(CompanyTestMixin, ModuleTestCase):
                                         'product': variant4.id,
                                         'base_price_formula': 'unit_price*Decimal(0.2)',
                                         'formula': '0',
-                                        'discount_rate': '10',
+                                        'discount_rate': Decimal('0.1'),
                                         }, {
                                         'formula': 'unit_price',
                                         }])],
@@ -92,7 +92,7 @@ class SaleDiscountPriceListTestCase(CompanyTestMixin, ModuleTestCase):
                 (variant1, Decimal('8.0000')),
                 (variant2, Decimal('9.0000')),
                 (variant3, Decimal('2.0000')),
-                (variant4, Decimal('2.0000')),
+                (variant4, Decimal('1.8000')),
                 ]
             with Transaction().set_context(price_list=price_list.id):
                 for product, unit_price in tests:
