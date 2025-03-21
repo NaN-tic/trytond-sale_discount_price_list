@@ -65,8 +65,8 @@ class PriceList(metaclass=PoolMeta):
                 product, quantity, product.default_uom)
             if base_price is not None:
                 if line.discount_rate is not None:
-                    base_price = base_price * (1 - line.discount_rate)
-                unit_price = round_price(base_price)
+                    unit_price = base_price * (1 - line.discount_rate)
+                unit_price = round_price(unit_price)
         return unit_price
 
 
