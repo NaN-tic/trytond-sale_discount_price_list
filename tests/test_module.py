@@ -28,9 +28,6 @@ class SaleDiscountPriceListTestCase(CompanyTestMixin, ModuleTestCase):
             kilogram, = Uom.search([
                     ('name', '=', 'Kilogram'),
                     ])
-            gram, = Uom.search([
-                    ('name', '=', 'Gram'),
-                    ])
 
             account_category = Category(
                 name='Account Category',

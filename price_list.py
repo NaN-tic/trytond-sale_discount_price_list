@@ -62,11 +62,11 @@ class PriceList(metaclass=PoolMeta):
             pattern=pattern)
         if line and line.formula == '0' and line.base_price_formula:
             base_price = self.compute_base_price(
-                product, quantity, product.default_uom)
+                product, quantity, product.default_uom, pattern=pattern)
             if base_price is not None:
                 if line.discount_rate is not None:
-                    unit_price = base_price * (1 - line.discount_rate)
-                unit_price = round_price(unit_price)
+                    base_price = base_price * (1 - line.discount_rate)
+                unit_price = round_price(base_price)
         return unit_price
 
 
