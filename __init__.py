@@ -4,7 +4,6 @@ from trytond.pool import Pool
 from . import sale
 from . import price_list
 
-
 def register():
     Pool.register(
         sale.SaleLine,
