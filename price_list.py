@@ -9,6 +9,7 @@ from trytond.pyson import Eval, Bool
 from trytond.i18n import gettext
 from trytond.tools import decistmt
 from trytond.modules.product_price_list.price_list import FormulaError, Null
+from trytond.modules.product.product import round_price
 
 
 class PriceList(metaclass=PoolMeta):
@@ -54,6 +55,20 @@ class PriceList(metaclass=PoolMeta):
         if line:
             return line.discount_rate
 
+    def compute(self, product, quantity, uom, pattern=None):
+        unit_price = super().compute(product, quantity, uom, pattern)
+
+        line = self.get_price_line(product, quantity, product.default_uom,
+            pattern=pattern)
+        if line and line.formula == '0' and line.base_price_formula:
+            base_price = self.compute_base_price(
+                product, quantity, product.default_uom, pattern=pattern)
+            if base_price is not None:
+                if line.discount_rate is not None:
+                    base_price = base_price * (1 - line.discount_rate)
+                unit_price = round_price(base_price)
+        return unit_price
+
 
 class PriceListLine(metaclass=PoolMeta):
     __name__ = 'product.price_list.line'
@@ -82,11 +97,11 @@ class PriceListLine(metaclass=PoolMeta):
                 and self.discount_rate is not None):
             self.formula = '0'
 
-    @fields.depends('base_price_formula', 'discount_rate')
+    @fields.depends(methods=['update_formula'])
     def on_change_base_price_formula(self):
         self.update_formula()
 
-    @fields.depends('base_price_formula', 'discount_rate')
+    @fields.depends(methods=['update_formula'])
     def on_change_discount_rate(self):
         self.update_formula()
 
