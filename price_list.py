@@ -97,11 +97,11 @@ class PriceListLine(metaclass=PoolMeta):
                 and self.discount_rate is not None):
             self.formula = '0'
 
-    @fields.depends('base_price_formula', 'discount_rate')
+    @fields.depends(methods=['update_formula'])
     def on_change_base_price_formula(self):
         self.update_formula()
 
-    @fields.depends('base_price_formula', 'discount_rate')
+    @fields.depends(methods=['update_formula'])
     def on_change_discount_rate(self):
         self.update_formula()
 
