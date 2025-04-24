@@ -25,7 +25,7 @@ class SaleLine(metaclass=PoolMeta):
             price_list = PriceList(context.get('price_list'))
         if price_list and self.unit:
             discount_rate = price_list.compute_discount_rate(self.product,
-                self.quantity, self.unit)
+                self.quantity or 0, self.unit)
             if not discount_rate is None:
                 self.discount_rate = discount_rate
                 self.on_change_discount_rate()
@@ -43,7 +43,7 @@ class SaleLine(metaclass=PoolMeta):
             if self.sale and self.sale.price_list else None)
         if self.product and price_list:
             price = price_list.compute_base_price(self.product,
-                self.quantity, self.unit)
+                self.quantity or 0, self.unit)
             if price_list.tax_included and self.taxes and price is not None:
                 price = Tax.reverse_compute(price, self.taxes, today)
             if not price is None:
