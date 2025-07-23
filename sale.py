@@ -35,12 +35,19 @@ class SaleLine(metaclass=PoolMeta):
         pool = Pool()
         Tax = pool.get('account.tax')
         Date = pool.get('ir.date')
+        PriceList = pool.get('product.price_list')
 
         res = super().compute_base_price()
 
         today = Date.today()
         price_list = (self.sale.price_list
             if self.sale and self.sale.price_list else None)
+        if not price_list:
+            context = Transaction().context
+            if context.get('price_list'):
+                price_list = context.get('price_list')
+                price_list = PriceList(price_list)
+
         if self.product and price_list:
             price = price_list.compute_base_price(self.product,
                 self.quantity or 0, self.unit)
